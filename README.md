@@ -11,9 +11,7 @@ It uses youtube as the audio source and Spotify API for playlist details.
 ## Installation
 Install golang and
 ```bash
-git clone https://github.com/BharatKalluri/spotifydl
-cd spotifydl
-go install
+go get github.com/BharatKalluri/spotifydl
 ```
 and make sure you have `$GOPATH/bin` in your path.
 
