@@ -25,6 +25,6 @@ func Start(username *string, pid *string) {
 
 	for _, track := range cli.YoutubeIDList {
 		ytURL := "https://www.youtube.com/watch?v=" + track
-		Downloader(ytURL)
+		go Downloader(ytURL)
 	}
 }
