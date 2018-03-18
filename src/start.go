@@ -3,6 +3,8 @@ package spotifydl
 import (
 	"fmt"
 
+	"github.com/gosuri/uiprogress"
+	"github.com/gosuri/uiprogress/util/strutil"
 	"github.com/zmb3/spotify"
 )
 
@@ -15,16 +17,31 @@ func Start(username *string, pid *string) {
 	playlistID := spotify.ID(*pid)
 	trackListJSON, _ := cli.UserClient.GetPlaylistTracks(*username, playlistID)
 	for _, val := range trackListJSON.Tracks {
-		fmt.Println("Added ", val.Track.Name)
 		cli.TrackList = append(cli.TrackList, val.Track)
 	}
 
+	fmt.Println("👍 Found", len(cli.TrackList), "tracks")
+	fmt.Println("🎵 Searching and downloading tracks")
+	uiprogress.Start()
+	bar := uiprogress.AddBar(len(cli.TrackList) - 1)
+
+	bar.AppendCompleted()
+	bar.PrependFunc(func(b *uiprogress.Bar) string {
+		return "   🔍 " + strutil.Resize(cli.TrackList[b.Current()].Name, 30)
+	})
 	for _, val := range cli.TrackList {
 		cli.YoutubeIDList = append(cli.YoutubeIDList, GetYoutubeIds(string(val.Name)+" "+string(val.Album.Name)+" music video"))
+		bar.Incr()
 	}
-
+	bar2 := uiprogress.AddBar(len(cli.TrackList) - 1)
+	bar2.AppendCompleted()
+	bar2.PrependFunc(func(b *uiprogress.Bar) string {
+		return "   ⬇️ " + strutil.Resize(cli.TrackList[b.Current()].Name, 30)
+	})
 	for _, track := range cli.YoutubeIDList {
 		ytURL := "https://www.youtube.com/watch?v=" + track
 		Downloader(ytURL)
+		bar2.Incr()
 	}
+	uiprogress.Stop()
 }
