@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-    "github.com/BharatKalluri/spotifydl/src"
+	"github.com/BharatKalluri/spotifydl/src"
 )
 
 func main() {

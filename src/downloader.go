@@ -1,7 +1,6 @@
 package spotifydl
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/rylio/ytdl"
@@ -9,8 +8,6 @@ import (
 
 // Downloader is a function to download files
 func Downloader(url string) {
-	fmt.Println("Download started", url)
-
 	vid, _ := ytdl.GetVideoInfo(url)
 	audioTracks := ytdl.FormatList{}
 
