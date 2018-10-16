@@ -19,7 +19,7 @@ func Downloader(url string) {
 
 	bestAudio := audioTracks.Best(ytdl.FormatAudioBitrateKey)
 	if len(bestAudio) > 0 {
-		file, err := os.Create(vid.Title + ".webm")
+		file, err := os.Create(vid.Title + ".mp3")
 		if err != nil {
 			panic("File Not Created: Check permissions")
 		}

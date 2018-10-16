@@ -8,7 +8,7 @@ import (
 	"google.golang.org/api/youtube/v3"
 )
 
-const developerKey = "AIzaSyCkeEYBmBP5pfyjhYf8QHCRnfGQRsBM5hE"
+const developerKey = "AIzaSyCqHX9XaJgLbUF_qdSVVY67fKCD6Okqa0U"
 
 func GetYoutubeIds(songName string) string {
 	client := &http.Client{

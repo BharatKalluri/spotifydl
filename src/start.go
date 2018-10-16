@@ -15,7 +15,7 @@ func Start(username *string, pid *string) {
 		UserClient: user,
 	}
 	playlistID := spotify.ID(*pid)
-	trackListJSON, _ := cli.UserClient.GetPlaylistTracks(*username, playlistID)
+	trackListJSON, _ := cli.UserClient.GetPlaylistTracks(playlistID)
 	for _, val := range trackListJSON.Tracks {
 		cli.TrackList = append(cli.TrackList, val.Track)
 	}
@@ -40,9 +40,9 @@ func Start(username *string, pid *string) {
 	bar2.AppendCompleted()
 	bar2.PrependFunc(func(b *uiprogress.Bar) string {
 		if b.Current() == len(cli.TrackList){
-			return "   ⬇️ " + strutil.Resize("Download complete", 30)
+			return "   ⬇️  " + strutil.Resize("Download complete", 30)
 		}
-		return "   ⬇️ " + strutil.Resize(cli.TrackList[b.Current()].Name, 30)
+		return "   ⬇️  " + strutil.Resize(cli.TrackList[b.Current()].Name, 30)
 	})
 	for _, track := range cli.YoutubeIDList {
 		ytURL := "https://www.youtube.com/watch?v=" + track
