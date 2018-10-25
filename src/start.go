@@ -33,7 +33,7 @@ func Start(username *string, pid *string) {
 		return "   🔍 " + strutil.Resize(cli.TrackList[b.Current()].Name, 30)
 	})
 	for _, val := range cli.TrackList {
-		cli.YoutubeIDList = append(cli.YoutubeIDList, GetYoutubeIds(string(val.Name)+" "+string(val.Album.Name)+" lyric video"))
+		cli.YoutubeIDList = append(cli.YoutubeIDList, GetYoutubeIds(string(val.Name)+" "+string(val.Album.Name)+" music video"))
 		bar.Incr()
 	}
 	bar2 := uiprogress.AddBar(len(cli.TrackList))
