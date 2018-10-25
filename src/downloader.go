@@ -1,32 +1,13 @@
 package spotifydl
 
-import (
-	"os"
-
-	"github.com/rylio/ytdl"
-)
+import "os/exec"
 
 // Downloader is a function to download files
 func Downloader(url string) {
-	vid, _ := ytdl.GetVideoInfo(url)
-	audioTracks := ytdl.FormatList{}
-
-	for _, format := range vid.Formats {
-		if format.ValueForKey(ytdl.FormatResolutionKey) == "" {
-			audioTracks = append(audioTracks, format)
-		}
-	}
-
-	bestAudio := audioTracks.Best(ytdl.FormatAudioBitrateKey)
-	if len(bestAudio) > 0 {
-		file, err := os.Create(vid.Title + ".mp3")
-		if err != nil {
-			panic("File Not Created: Check permissions")
-		}
-		defer file.Close()
-		err = vid.Download(bestAudio[0], file)
-		if err != nil {
-			panic("Not Downloading, Check Internet")
-		}
+	ytdlCmd := exec.Command("youtube-dl", "-f", "bestaudio", "--extract-audio", "--audio-format", "mp3",
+		"-o", "%(title)s.%(ext)s", "--audio-quality", "0", url)
+	_, err := ytdlCmd.Output()
+	if err != nil {
+		panic(err)
 	}
 }
