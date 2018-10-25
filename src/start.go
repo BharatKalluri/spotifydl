@@ -27,26 +27,26 @@ func Start(username *string, pid *string) {
 
 	bar.AppendCompleted()
 	bar.PrependFunc(func(b *uiprogress.Bar) string {
-		if b.Current() == len(cli.TrackList){
+		if b.Current() == len(cli.TrackList) {
 			return "   🔍 " + strutil.Resize("Search complete", 30)
 		}
 		return "   🔍 " + strutil.Resize(cli.TrackList[b.Current()].Name, 30)
 	})
 	for _, val := range cli.TrackList {
-		cli.YoutubeIDList = append(cli.YoutubeIDList, GetYoutubeIds(string(val.Name)+" "+string(val.Album.Name)+" music video"))
+		cli.YoutubeIDList = append(cli.YoutubeIDList, GetYoutubeIds(string(val.Name)+" "+string(val.Album.Name)+" lyric video"))
 		bar.Incr()
 	}
 	bar2 := uiprogress.AddBar(len(cli.TrackList))
 	bar2.AppendCompleted()
 	bar2.PrependFunc(func(b *uiprogress.Bar) string {
-		if b.Current() == len(cli.TrackList){
+		if b.Current() == len(cli.TrackList) {
 			return "   ⬇️  " + strutil.Resize("Download complete", 30)
 		}
 		return "   ⬇️  " + strutil.Resize(cli.TrackList[b.Current()].Name, 30)
 	})
-	for _, track := range cli.YoutubeIDList {
+	for index, track := range cli.YoutubeIDList {
 		ytURL := "https://www.youtube.com/watch?v=" + track
-		Downloader(ytURL)
+		Downloader(ytURL, cli.TrackList[index])
 		bar2.Incr()
 	}
 	uiprogress.Stop()
