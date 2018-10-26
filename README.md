@@ -9,10 +9,11 @@ Spotifydl is a spotify playlist downloader.
 It uses youtube as the audio source and Spotify API for playlist details.
 
 ## Installation
-Install golang and
+Install golang and youtube-dl. 
 ```bash
 go get github.com/BharatKalluri/spotifydl
 ```
+Make sure you have python 3 with pip installed on your system. Instructions to install can be found [here](https://rg3.github.io/youtube-dl/download.html)
 and make sure you have `$GOPATH/bin` in your path.
 
 
