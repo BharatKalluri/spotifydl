@@ -3,7 +3,9 @@ package spotifydl
 import (
 	"fmt"
 	"os/exec"
+	"strconv"
 	"strings"
+	"time"
 
 	id3 "github.com/mikkyang/id3-go"
 	"github.com/zmb3/spotify"
@@ -18,6 +20,8 @@ func Downloader(url string, track spotify.FullTrack) {
 		trackArtist = append(trackArtist, Artist.Name)
 	}
 	artistTag := strings.Join(trackArtist[:], ",")
+	dateObject, _ := time.Parse("2006-01-02", track.Album.ReleaseDate)
+	yearTag := dateObject.Year()
 
 	ytdlCmd := exec.Command("youtube-dl", "-f", "bestaudio", "--extract-audio", "--audio-format", "mp3",
 		"-o", track.Name+".%(ext)s", "--audio-quality", "0", url)
@@ -35,4 +39,5 @@ func Downloader(url string, track spotify.FullTrack) {
 	mp3File.SetTitle(track.Name)
 	mp3File.SetArtist(artistTag)
 	mp3File.SetAlbum(albumTag)
+	mp3File.SetYear(strconv.Itoa(yearTag))
 }

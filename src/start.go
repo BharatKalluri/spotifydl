@@ -42,7 +42,7 @@ func Start(username *string, pid *string) {
 		if b.Current() == len(cli.TrackList) {
 			return "   ⬇️  " + strutil.Resize("Download complete", 30)
 		}
-		return "   ⬇️  " + strutil.Resize(cli.TrackList[b.Current()].Name, 30)
+		return "  ⬇️  " + strutil.Resize(fmt.Sprintf("Downloading: %s (%d/%d)", cli.TrackList[b.Current()].Name, b.Current(), len(cli.TrackList)), 30)
 	})
 	for index, track := range cli.YoutubeIDList {
 		ytURL := "https://www.youtube.com/watch?v=" + track
