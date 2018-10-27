@@ -6,7 +6,8 @@ import (
 
 	"github.com/zmb3/spotify"
 	"golang.org/x/oauth2/clientcredentials"
-	// transport is used as dependency for yutube API
+
+	// transport is used as dependency for youtube API
 	_ "google.golang.org/api/googleapi/transport"
 	_ "google.golang.org/api/youtube/v3"
 )
