@@ -1,15 +1,17 @@
  
 <h1 align="center">Spotifydl</h1>
-<h4 align="center">A Downloader for Spotify Playlist's</h4>
+<h4 align="center">A Music Downloader for Spotify</h4>
 
 ----
+
+![Spotifydl Demo](spotifydl.gif)
 
 Spotifydl is a spotify playlist downloader.
 
 It uses youtube as the audio source and Spotify API for playlist details.
 
 ## Installation
-Install golang and youtube-dl. 
+Make sure you have golang, youtube-dl and ffmpeg installed.
 ```bash
 go get github.com/BharatKalluri/spotifydl
 ```
@@ -21,13 +23,8 @@ and make sure you have `$GOPATH/bin` in your path.
 
 ```bash
 # help
-spotifydl -h
 
-# playlist and username must be supplied
-# Suppose we consider an awesome playlist like waking the demon
-# URL is https://open.spotify.com/user/22ywbwcqu2ci2rukqyhx7z5ha/playlist/13rgfJS9aI8PwfuDCaGJp0
-# username will be 22ywbwcqu2ci2rukqyhx7z5ha and playlistid will be 13rgfJS9aI8PwfuDCaGJp0
-spotifydl -username 22ywbwcqu2ci2rukqyhx7z5ha -playlistid 13rgfJS9aI8PwfuDCaGJp0
+spotifydl -p 13rgfJS9aI8PwfuDCaGJp0
 # Voila!!
 ```
 
