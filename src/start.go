@@ -54,7 +54,10 @@ func DownloadTracklist(cli UserData) {
 		return "   🔍 " + strutil.Resize(cli.TrackList[b.Current()].Name, 30)
 	})
 	for _, val := range cli.TrackList {
-		cli.YoutubeIDList = append(cli.YoutubeIDList, GetYoutubeIds(string(val.Name)+" "+string(val.Artists[0].Name)))
+		youtubeID, found := GetYoutubeIds(string(val.Name)+" "+string(val.Artists[0].Name))
+		if(found) {
+			cli.YoutubeIDList = append(cli.YoutubeIDList, youtubeID)
+		}
 		bar.Incr()
 	}
 	bar2 := uiprogress.AddBar(len(cli.TrackList))

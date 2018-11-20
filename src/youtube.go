@@ -11,7 +11,7 @@ import (
 const developerKey = "AIzaSyCqHX9XaJgLbUF_qdSVVY67fKCD6Okqa0U"
 
 // GetYoutubeIds takes the query as string and returns the search results video ID's
-func GetYoutubeIds(songName string) string {
+func GetYoutubeIds(songName string) (string, bool) {
 	client := &http.Client{
 		Transport: &transport.APIKey{Key: developerKey},
 	}
@@ -36,5 +36,8 @@ func GetYoutubeIds(songName string) string {
 	for id := range videos {
 		videosIds = append(videosIds, id)
 	}
-	return videosIds[0]
+	if len(videosIds) == 0 {
+		return "", false
+	}
+	return videosIds[0], true
 }
