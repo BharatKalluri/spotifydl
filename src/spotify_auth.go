@@ -29,6 +29,7 @@ type UserData struct {
 
 // InitAuth starts Authentication
 func InitAuth() spotify.Client {
+	// Please do not misuse :)
 	config := &clientcredentials.Config{
 		ClientID:     "07d728d8751646219ab0532ca21ba982",
 		ClientSecret: "6ad82c4fd7cc498fbf738ea08f4135d3",
