@@ -7,7 +7,8 @@ import (
 	"strings"
 	"time"
 
-	id3 "github.com/mikkyang/id3-go"
+	"github.com/BharatKalluri/spotifydl/src/utils"
+	"github.com/bogem/id3v2"
 	"github.com/zmb3/spotify"
 )
 
@@ -22,6 +23,9 @@ func Downloader(url string, track spotify.FullTrack) {
 	artistTag := strings.Join(trackArtist[:], ",")
 	dateObject, _ := time.Parse("2006-01-02", track.Album.ReleaseDate)
 	yearTag := dateObject.Year()
+	// TODO: Check images is not null
+	albumArtURL := track.Album.Images[0].URL
+	albumArt := utils.DownloadFile(albumArtURL)
 
 	ytdlCmd := exec.Command("youtube-dl", "-f", "bestaudio", "--extract-audio", "--audio-format", "mp3",
 		"-o", track.Name+".%(ext)s", "--audio-quality", "0", url)
@@ -31,7 +35,7 @@ func Downloader(url string, track spotify.FullTrack) {
 	}
 
 	// Tag the file with metadata
-	mp3File, err := id3.Open(nameTag)
+	mp3File, err := id3v2.Open(nameTag, id3v2.Options{Parse: true})
 	if err != nil {
 		panic(err)
 	}
@@ -40,4 +44,12 @@ func Downloader(url string, track spotify.FullTrack) {
 	mp3File.SetArtist(artistTag)
 	mp3File.SetAlbum(albumTag)
 	mp3File.SetYear(strconv.Itoa(yearTag))
+	pic := id3v2.PictureFrame{
+		Encoding:    id3v2.EncodingUTF8,
+		MimeType:    "image/jpeg",
+		PictureType: id3v2.PTFrontCover,
+		Description: "Front cover",
+		Picture:     albumArt,
+	}
+	mp3File.AddAttachedPicture(pic)
 }
