@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	var trackid string
 	var playlistid string
 	var albumid string
 	var spotifyURL string
@@ -17,8 +18,7 @@ func main() {
 	var rootCmd = &cobra.Command{
 		Use:   "spotifydl",
 		Short: "spotifydl is a awesome music downloader",
-		Long: `Spotifydl lets you download albums and playlists and tags them for you.
-Pass Either album ID or Playlist ID to start downloading`,
+		Long:  `Spotifydl lets you download albums and playlists and tags them for you.`,
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if len(spotifyURL) > 0 {
@@ -40,6 +40,8 @@ Pass Either album ID or Playlist ID to start downloading`,
 					albumid = spotifyID
 				} else if strings.Contains(spotifyURL, "playlist") {
 					playlistid = spotifyID
+				} else if strings.Contains(spotifyURL, "track") {
+					trackid = spotifyID
 				}
 			}
 
@@ -49,6 +51,8 @@ Pass Either album ID or Playlist ID to start downloading`,
 			} else if len(playlistid) > 0 {
 				// Download playlist with the given ID
 				spotifydl.DownloadPlaylist(playlistid)
+			} else if len(trackid) > 0 {
+				spotifydl.DownloadSong(trackid)
 			} else {
 				fmt.Println("Enter valid input.")
 				cmd.Help()
@@ -56,6 +60,7 @@ Pass Either album ID or Playlist ID to start downloading`,
 		},
 	}
 
+	rootCmd.Flags().StringVarP(&trackid, "trackid", "t", "", "Track ID found on spotify")
 	rootCmd.Flags().StringVarP(&playlistid, "playlistid", "p", "", "Album ID found on spotify")
 	rootCmd.Flags().StringVarP(&albumid, "albumid", "a", "", "Album ID found on spotify")
 	rootCmd.Flags().StringVarP(&spotifyURL, "spotifyurl", "u", "", "URL copied on spotify")
