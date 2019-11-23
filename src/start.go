@@ -46,6 +46,25 @@ func DownloadAlbum(aid string) {
 	DownloadTracklist(cli)
 }
 
+// DownloadSong will download a song with its identifier
+func DownloadSong(sid string) {
+	user := InitAuth()
+	cli := UserData{
+		UserClient: user,
+	}
+	songID := spotify.ID(sid)
+	song, err := user.GetTrack(songID)
+	if err != nil {
+		fmt.Println("Song not found!")
+		os.Exit(1)
+	}
+	cli.TrackList = append(cli.TrackList, spotify.FullTrack{
+		SimpleTrack: song.SimpleTrack,
+		Album:       song.Album,
+	})
+	DownloadTracklist(cli)
+}
+
 // DownloadTracklist Start downloading given list of tracks
 func DownloadTracklist(cli UserData) {
 	fmt.Println("Found", len(cli.TrackList), "tracks")
