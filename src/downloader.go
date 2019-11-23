@@ -2,6 +2,7 @@ package spotifydl
 
 import (
 	"fmt"
+	"log"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -52,4 +53,7 @@ func Downloader(url string, track spotify.FullTrack) {
 		Picture:     albumArt,
 	}
 	mp3File.AddAttachedPicture(pic)
+	if err = mp3File.Save(); err != nil {
+		log.Fatal("Error while saving a tag: ", err)
+	}
 }

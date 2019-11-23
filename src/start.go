@@ -15,6 +15,7 @@ func DownloadPlaylist(pid string) {
 		UserClient: user,
 	}
 	playlistID := spotify.ID(pid)
+	// TODO: Exit gracefully if the playlist is not found
 	trackListJSON, _ := cli.UserClient.GetPlaylistTracks(playlistID)
 	for _, val := range trackListJSON.Tracks {
 		cli.TrackList = append(cli.TrackList, val.Track)
@@ -29,6 +30,7 @@ func DownloadAlbum(aid string) {
 		UserClient: user,
 	}
 	albumid := spotify.ID(aid)
+	// TODO: Exit gracefully if album is not found
 	album, _ := user.GetAlbum(albumid)
 	for _, val := range album.Tracks.Tracks {
 		cli.TrackList = append(cli.TrackList, spotify.FullTrack{

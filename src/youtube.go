@@ -20,8 +20,8 @@ func GetYoutubeIds(songName string) string {
 	if err != nil {
 		log.Fatalf("Error creating new YouTube client: %v", err)
 	}
-	call := service.Search.List("id,snippet").
-		Q(songName)
+	// Video category ID 10 is for music videos
+	call := service.Search.List("id,snippet").Q(songName).VideoCategoryId("10").Type("video")
 	response, err := call.Do()
 	if err != nil {
 		log.Fatalf("Error making search API call: %v", err)
