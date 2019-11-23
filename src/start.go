@@ -2,6 +2,7 @@ package spotifydl
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/zmb3/spotify"
 )
@@ -13,8 +14,11 @@ func DownloadPlaylist(pid string) {
 		UserClient: user,
 	}
 	playlistID := spotify.ID(pid)
-	// TODO: Exit gracefully if the playlist is not found
-	trackListJSON, _ := cli.UserClient.GetPlaylistTracks(playlistID)
+	trackListJSON, err := cli.UserClient.GetPlaylistTracks(playlistID)
+	if err != nil {
+		fmt.Println("Playlist not found!")
+		os.Exit(1)
+	}
 	for _, val := range trackListJSON.Tracks {
 		cli.TrackList = append(cli.TrackList, val.Track)
 	}
@@ -28,8 +32,11 @@ func DownloadAlbum(aid string) {
 		UserClient: user,
 	}
 	albumid := spotify.ID(aid)
-	// TODO: Exit gracefully if album is not found
-	album, _ := user.GetAlbum(albumid)
+	album, err := user.GetAlbum(albumid)
+	if err != nil {
+		fmt.Println("Album not found!")
+		os.Exit(1)
+	}
 	for _, val := range album.Tracks.Tracks {
 		cli.TrackList = append(cli.TrackList, spotify.FullTrack{
 			SimpleTrack: val,

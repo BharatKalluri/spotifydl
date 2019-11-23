@@ -21,9 +21,7 @@ func TagFileWithSpotifyMetadata(fileName string, trackData spotify.FullTrack) {
 	artistTag := strings.Join(trackArtist[:], ",")
 	dateObject, _ := time.Parse("2006-01-02", trackData.Album.ReleaseDate)
 	yearTag := dateObject.Year()
-	// TODO: Check images is not null
-	albumArtURL := trackData.Album.Images[0].URL
-	albumArt := DownloadFile(albumArtURL)
+	albumArtImages := trackData.Album.Images
 
 	mp3File, err := id3v2.Open(fileName, id3v2.Options{Parse: true})
 	if err != nil {
@@ -35,14 +33,21 @@ func TagFileWithSpotifyMetadata(fileName string, trackData spotify.FullTrack) {
 	mp3File.SetArtist(artistTag)
 	mp3File.SetAlbum(albumTag)
 	mp3File.SetYear(strconv.Itoa(yearTag))
-	pic := id3v2.PictureFrame{
-		Encoding:    id3v2.EncodingUTF8,
-		MimeType:    "image/jpeg",
-		PictureType: id3v2.PTFrontCover,
-		Description: "Front cover",
-		Picture:     albumArt,
+
+	if len(albumArtImages) > 0 {
+		albumArtURL := albumArtImages[0].URL
+		albumArt, albumArtDownloadErr := DownloadFile(albumArtURL)
+		if albumArtDownloadErr != nil {
+			pic := id3v2.PictureFrame{
+				Encoding:    id3v2.EncodingUTF8,
+				MimeType:    "image/jpeg",
+				PictureType: id3v2.PTFrontCover,
+				Description: "Front cover",
+				Picture:     albumArt,
+			}
+			mp3File.AddAttachedPicture(pic)
+		}
 	}
-	mp3File.AddAttachedPicture(pic)
 
 	if err = mp3File.Save(); err != nil {
 		log.Fatal("Error while saving a tag: ", err)
