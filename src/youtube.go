@@ -8,8 +8,8 @@ import (
 	"google.golang.org/api/youtube/v3"
 )
 
-// TODO: Get this from the config
-const developerKey = ""
+// Please do not misuse :)
+const developerKey = "AIzaSyDQn4VAc4MzrKOjo2sv5ucmKsQUIfKFaSE"
 
 // GetYoutubeIds takes the query as string and returns the search results video ID's
 func GetYoutubeIds(songName string) string {
