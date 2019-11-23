@@ -61,7 +61,7 @@ func main() {
 	}
 
 	rootCmd.Flags().StringVarP(&trackid, "trackid", "t", "", "Track ID found on spotify")
-	rootCmd.Flags().StringVarP(&playlistid, "playlistid", "p", "", "Album ID found on spotify")
+	rootCmd.Flags().StringVarP(&playlistid, "playlistid", "p", "", "Playlist ID found on spotify")
 	rootCmd.Flags().StringVarP(&albumid, "albumid", "a", "", "Album ID found on spotify")
 	rootCmd.Flags().StringVarP(&spotifyURL, "spotifyurl", "u", "", "URL copied on spotify")
 
