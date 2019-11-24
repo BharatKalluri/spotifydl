@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -37,7 +38,7 @@ func TagFileWithSpotifyMetadata(fileName string, trackData spotify.FullTrack) {
 	if len(albumArtImages) > 0 {
 		albumArtURL := albumArtImages[0].URL
 		albumArt, albumArtDownloadErr := DownloadFile(albumArtURL)
-		if albumArtDownloadErr != nil {
+		if albumArtDownloadErr == nil {
 			pic := id3v2.PictureFrame{
 				Encoding:    id3v2.EncodingUTF8,
 				MimeType:    "image/jpeg",
@@ -46,7 +47,11 @@ func TagFileWithSpotifyMetadata(fileName string, trackData spotify.FullTrack) {
 				Picture:     albumArt,
 			}
 			mp3File.AddAttachedPicture(pic)
+		} else {
+			fmt.Println("An error occured while downloading album art ", err)
 		}
+	} else {
+		fmt.Println("No album art found for ", trackData.Name)
 	}
 
 	if err = mp3File.Save(); err != nil {
