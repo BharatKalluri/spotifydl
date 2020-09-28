@@ -26,16 +26,12 @@ func GetYoutubeIds(songName string) string {
 	if err != nil {
 		log.Fatalf("Error making search API call: %v", err)
 	}
-	videos := make(map[string]string)
 	for _, item := range response.Items {
 		switch item.Id.Kind {
 		case "youtube#video":
-			videos[item.Id.VideoId] = item.Snippet.Title
+			return item.Id.VideoId
 		}
 	}
-	var videosIds []string
-	for id := range videos {
-		videosIds = append(videosIds, id)
-	}
-	return videosIds[0]
+	// TODO: Handle when the query returns no songs (highly unlikely since the query is coming from spotify though)
+	return ""
 }
