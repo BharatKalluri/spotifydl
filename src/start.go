@@ -2,6 +2,7 @@ package spotifydl
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/zmb3/spotify"
@@ -14,6 +15,7 @@ func DownloadPlaylist(pid string) {
 		UserClient: user,
 	}
 	playlistID := spotify.ID(pid)
+
 	trackListJSON, err := cli.UserClient.GetPlaylistTracks(playlistID)
 	if err != nil {
 		fmt.Println("Playlist not found!")
@@ -22,7 +24,22 @@ func DownloadPlaylist(pid string) {
 	for _, val := range trackListJSON.Tracks {
 		cli.TrackList = append(cli.TrackList, val.Track)
 	}
-	DownloadTracklist(cli)
+
+	for page := 0; ; page++ {
+		err := cli.UserClient.NextPage(trackListJSON)
+		if err == spotify.ErrNoMorePages {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for _, val := range trackListJSON.Tracks {
+			cli.TrackList = append(cli.TrackList, val.Track)
+		}
+	}
+
+	DownloadTrackList(cli)
 }
 
 // DownloadAlbum Download album according to
@@ -31,8 +48,8 @@ func DownloadAlbum(aid string) {
 	cli := UserData{
 		UserClient: user,
 	}
-	albumid := spotify.ID(aid)
-	album, err := user.GetAlbum(albumid)
+	albumID := spotify.ID(aid)
+	album, err := user.GetAlbum(albumID)
 	if err != nil {
 		fmt.Println("Album not found!")
 		os.Exit(1)
@@ -43,7 +60,7 @@ func DownloadAlbum(aid string) {
 			Album:       album.SimpleAlbum,
 		})
 	}
-	DownloadTracklist(cli)
+	DownloadTrackList(cli)
 }
 
 // DownloadSong will download a song with its identifier
@@ -62,15 +79,16 @@ func DownloadSong(sid string) {
 		SimpleTrack: song.SimpleTrack,
 		Album:       song.Album,
 	})
-	DownloadTracklist(cli)
+	DownloadTrackList(cli)
 }
 
-// DownloadTracklist Start downloading given list of tracks
-func DownloadTracklist(cli UserData) {
+// DownloadTrackList Start downloading given list of tracks
+func DownloadTrackList(cli UserData) {
 	fmt.Println("Found", len(cli.TrackList), "tracks")
 	fmt.Println("Searching and downloading tracks")
 	for _, val := range cli.TrackList {
-		cli.YoutubeIDList = append(cli.YoutubeIDList, GetYoutubeIds(string(val.Name)+" "+string(val.Artists[0].Name)))
+		youtubeID := GetYoutubeIds(val.Name + " " + val.Artists[0].Name)
+		cli.YoutubeIDList = append(cli.YoutubeIDList, youtubeID)
 	}
 	for index, track := range cli.YoutubeIDList {
 		fmt.Println()
