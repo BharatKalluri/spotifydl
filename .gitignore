@@ -19,3 +19,6 @@
 spotifydl
 
 dist
+
+.idea
+.vscode
