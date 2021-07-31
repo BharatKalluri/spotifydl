@@ -90,7 +90,7 @@ func DownloadTrackList(cli UserData) {
 		searchTerm := val.Name + " " + val.Artists[0].Name
 		youtubeID, err := GetYoutubeId(searchTerm)
 		if err != nil {
-			log.Printf("Error occured for %s\n", val.Name)
+			log.Printf("Error occured for %s error: %s", val.Name, err)
 			continue
 		}
 		cli.YoutubeIDList = append(cli.YoutubeIDList, youtubeID)

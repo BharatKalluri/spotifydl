@@ -14,8 +14,7 @@ func DownloadFile(url string) ([]byte, error) {
 		panic(err)
 	}
 	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		HandleError(err, fmt.Sprintf("Could not download from URL: %s", url))
+		_ = Body.Close()
 	}(resp.Body)
 	buffer, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -23,10 +22,4 @@ func DownloadFile(url string) ([]byte, error) {
 		return nil, err
 	}
 	return buffer, nil
-}
-
-func HandleError(err error, message string) {
-	if err != nil {
-		fmt.Println(message)
-	}
 }
