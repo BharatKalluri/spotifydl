@@ -87,7 +87,12 @@ func DownloadTrackList(cli UserData) {
 	fmt.Println("Found", len(cli.TrackList), "tracks")
 	fmt.Println("Searching and downloading tracks")
 	for _, val := range cli.TrackList {
-		youtubeID := GetYoutubeIds(val.Name + " " + val.Artists[0].Name)
+		searchTerm := val.Name + " " + val.Artists[0].Name
+		youtubeID, err := GetYoutubeId(searchTerm)
+		if err != nil {
+			log.Printf("Error occured for %s\n", val.Name)
+			continue
+		}
 		cli.YoutubeIDList = append(cli.YoutubeIDList, youtubeID)
 	}
 	for index, track := range cli.YoutubeIDList {

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -12,11 +13,20 @@ func DownloadFile(url string) ([]byte, error) {
 	if err != nil {
 		panic(err)
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		HandleError(err, fmt.Sprintf("Could not download from URL: %s", url))
+	}(resp.Body)
 	buffer, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println("Failed to download album art!")
 		return nil, err
 	}
 	return buffer, nil
+}
+
+func HandleError(err error, message string) {
+	if err != nil {
+		fmt.Println(message)
+	}
 }
