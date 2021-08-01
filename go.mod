@@ -5,6 +5,7 @@ go 1.13
 require (
 	cloud.google.com/go v0.74.0 // indirect
 	github.com/bogem/id3v2 v1.2.0
+	github.com/buger/jsonparser v1.1.1
 	github.com/spf13/cobra v1.1.1
 	github.com/zmb3/spotify v0.0.0-20200814173021-9bec46940cc0
 	golang.org/x/net v0.0.0-20201224014010-6772e930b67b // indirect
