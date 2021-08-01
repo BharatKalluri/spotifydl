@@ -8,10 +8,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
 var httpClient = &http.Client{}
+var durationMatchThreshold = 5
 
 type SearchResult struct {
 	Title, Uploader, URL, Duration, ID string
@@ -20,9 +22,28 @@ type SearchResult struct {
 	Extra                              []string
 }
 
+func convertStringDurationToSeconds(durationStr string) int {
+	splitEntities := strings.Split(durationStr, ":")
+	if len(splitEntities) == 1 {
+		seconds, _ := strconv.Atoi(splitEntities[0])
+		return seconds
+	} else if len(splitEntities) == 2 {
+		seconds, _ := strconv.Atoi(splitEntities[1])
+		minutes, _ := strconv.Atoi(splitEntities[0])
+		return (minutes * 60) + seconds
+	} else if len(splitEntities) == 3 {
+		seconds, _ := strconv.Atoi(splitEntities[2])
+		minutes, _ := strconv.Atoi(splitEntities[1])
+		hours, _ := strconv.Atoi(splitEntities[0])
+		return ((hours * 60) * 60) + (minutes * 60) + seconds
+	} else {
+		return 0
+	}
+}
+
 // GetYoutubeId takes the query as string and returns the search results video ID's
-func GetYoutubeId(searchQuery string) (string, error) {
-	searchResults, err := ytSearch(searchQuery, 1)
+func GetYoutubeId(searchQuery string, songDurationInSeconds int) (string, error) {
+	searchResults, err := ytSearch(searchQuery, 10)
 	if err != nil {
 		return "", err
 	}
@@ -30,6 +51,16 @@ func GetYoutubeId(searchQuery string) (string, error) {
 		errorMessage := fmt.Sprintf("no songs found for %s", searchQuery)
 		return "", errors.New(errorMessage)
 	}
+	// Try for the closest match timestamp wise
+	for _, result := range searchResults {
+		allowedDurationRangeStart := songDurationInSeconds - durationMatchThreshold
+		allowedDurationRangeEnd := songDurationInSeconds + durationMatchThreshold
+		resultSongDuration := convertStringDurationToSeconds(result.Duration)
+		if resultSongDuration >= allowedDurationRangeStart && resultSongDuration <= allowedDurationRangeEnd {
+			return result.ID, nil
+		}
+	}
+	// Else return the first result if nothing is found
 	return searchResults[0].ID, nil
 }
 

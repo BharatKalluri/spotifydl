@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/zmb3/spotify"
 )
@@ -87,8 +88,12 @@ func DownloadTrackList(cli UserData) {
 	fmt.Println("Found", len(cli.TrackList), "tracks")
 	fmt.Println("Searching and downloading tracks")
 	for _, val := range cli.TrackList {
-		searchTerm := val.Name + " " + val.Artists[0].Name
-		youtubeID, err := GetYoutubeId(searchTerm)
+		var artistNames []string
+		for _, artistInfo := range val.Artists {
+			artistNames = append(artistNames, artistInfo.Name)
+		}
+		searchTerm := strings.Join(artistNames, " ") + " " + val.Name
+		youtubeID, err := GetYoutubeId(searchTerm, val.Duration/1000)
 		if err != nil {
 			log.Printf("Error occured for %s error: %s", val.Name, err)
 			continue
