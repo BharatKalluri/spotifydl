@@ -21,8 +21,7 @@ It uses Youtube as the audio source and Spotify API for playlist/album/track det
 
 Make sure you have golang, youtube-dl and ffmpeg installed.
 ```bash
-go get -u github.com/BharatKalluri/spotifydl
-go install github.com/BharatKalluri/spotifydl
+GO111MODULE=on go get -u github.com/BharatKalluri/spotifydl@0.1.1
 ```
 
 
