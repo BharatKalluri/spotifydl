@@ -1,12 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/BharatKalluri/spotifydl/src"
 	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
+)
+
+var (
+	ctx context.Context
 )
 
 func main() {
@@ -47,13 +52,13 @@ func main() {
 
 			if strings.Contains(spotifyURL, "album") {
 				albumID = spotifyID
-				spotifydl.DownloadAlbum(albumID)
+				spotifydl.DownloadAlbum(albumID, ctx)
 			} else if strings.Contains(spotifyURL, "playlist") {
 				playlistID = spotifyID
-				spotifydl.DownloadPlaylist(playlistID)
+				spotifydl.DownloadPlaylist(playlistID, ctx)
 			} else if strings.Contains(spotifyURL, "track") {
 				trackID = spotifyID
-				spotifydl.DownloadSong(trackID)
+				spotifydl.DownloadSong(trackID, ctx)
 			} else {
 				fmt.Println("=> Only Spotify Album/Playlist/Track URL's are supported.")
 				_ = cmd.Help()

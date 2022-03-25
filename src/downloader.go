@@ -5,13 +5,13 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/zmb3/spotify"
+	"github.com/zmb3/spotify/v2"
 
 	"github.com/BharatKalluri/spotifydl/src/utils"
 )
 
 // Downloader is a function to download files
-func Downloader(url string, track spotify.FullTrack) {
+func Downloader(url string, track spotify.SimpleTrack) {
 	nameTag := fmt.Sprintf("%s.mp3", track.Name)
 
 	ytdlCmd := exec.Command("youtube-dl", "-f", "bestaudio", "--extract-audio", "--audio-format", "mp3",
