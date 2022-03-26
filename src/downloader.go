@@ -11,7 +11,7 @@ import (
 )
 
 // Downloader is a function to download files
-func Downloader(url string, track spotify.SimpleTrack) {
+func Downloader(url string, track spotify.FullTrack) {
 	nameTag := fmt.Sprintf("%s.mp3", track.Name)
 
 	ytdlCmd := exec.Command("youtube-dl", "-f", "bestaudio", "--extract-audio", "--audio-format", "mp3",
@@ -25,5 +25,5 @@ func Downloader(url string, track spotify.SimpleTrack) {
 	}
 
 	// Tag the file with metadata
-	utils.TagFileWithSpotifyMetadataV2(nameTag, track)
+	utils.TagFileWithSpotifyMetadata(nameTag, track)
 }

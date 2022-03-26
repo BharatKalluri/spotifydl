@@ -104,7 +104,7 @@ func DownloadTrackList(cli UserData) {
 		fmt.Println()
 		ytURL := "https://www.youtube.com/watch?v=" + track
 		fmt.Println("⇓ Downloading " + cli.TrackList[index].Name)
-		Downloader(ytURL, cli.TrackList[index].SimpleTrack)
+		Downloader(ytURL, cli.TrackList[index])
 		fmt.Println()
 	}
 	fmt.Println("Download complete!")
