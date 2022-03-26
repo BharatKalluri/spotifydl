@@ -25,5 +25,5 @@ func Downloader(url string, track spotify.SimpleTrack) {
 	}
 
 	// Tag the file with metadata
-	utils.TagFileWithSpotifyMetadata(nameTag, track)
+	utils.TagFileWithSpotifyMetadataV2(nameTag, track)
 }

@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-// TagFileWithSpotifyMetadata takes in a filename as a string and spotify metadata and uses it to tag the music
-func TagFileWithSpotifyMetadata(fileName string, trackData spotify.SimpleTrack) {
+// TagFileWithSpotifyMetadataV2 takes in a filename as a string and spotify metadata and uses it to tag the music
+func TagFileWithSpotifyMetadataV2(fileName string, trackData spotify.SimpleTrack) {
 	var trackArtist []string
 	for _, Artist := range trackData.Artists {
 		trackArtist = append(trackArtist, Artist.Name)
@@ -32,5 +32,10 @@ func TagFileWithSpotifyMetadata(fileName string, trackData spotify.SimpleTrack) 
 	if err = mp3File.Save(); err != nil {
 		log.Fatal("Error while saving a tag: ", err)
 	}
+
+}
+
+// TagFileWithSpotifyMetadata takes in a filename as a string and spotify metadata and uses it to tag the music
+func TagFileWithSpotifyMetadata(fileName string, trackData spotify.FullTrack) {
 
 }
