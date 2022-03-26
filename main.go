@@ -52,13 +52,13 @@ func main() {
 
 			if strings.Contains(spotifyURL, "album") {
 				albumID = spotifyID
-				spotifydl.DownloadAlbum(albumID, ctx)
+				spotifydl.DownloadAlbum(ctx, albumID)
 			} else if strings.Contains(spotifyURL, "playlist") {
 				playlistID = spotifyID
-				spotifydl.DownloadPlaylist(playlistID, ctx)
+				spotifydl.DownloadPlaylist(ctx, playlistID)
 			} else if strings.Contains(spotifyURL, "track") {
 				trackID = spotifyID
-				spotifydl.DownloadSong(trackID, ctx)
+				spotifydl.DownloadSong(ctx, trackID)
 			} else {
 				fmt.Println("=> Only Spotify Album/Playlist/Track URL's are supported.")
 				_ = cmd.Help()

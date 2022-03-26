@@ -10,7 +10,7 @@ import (
 )
 
 // DownloadPlaylist Start initializes complete program
-func DownloadPlaylist(pid string, ctx context.Context) {
+func DownloadPlaylist(ctx context.Context, pid string) {
 	user := InitAuth()
 	cli := UserData{
 		UserClient: user,
@@ -44,7 +44,7 @@ func DownloadPlaylist(pid string, ctx context.Context) {
 }
 
 // DownloadAlbum Download album according to
-func DownloadAlbum(aid string, ctx context.Context) {
+func DownloadAlbum(ctx context.Context, aid string) {
 	user := InitAuth()
 	cli := UserData{
 		UserClient: user,
@@ -65,7 +65,7 @@ func DownloadAlbum(aid string, ctx context.Context) {
 }
 
 // DownloadSong will download a song with its identifier
-func DownloadSong(sid string, ctx context.Context) {
+func DownloadSong(ctx context.Context, sid string) {
 	user := InitAuth()
 	cli := UserData{
 		UserClient: user,
