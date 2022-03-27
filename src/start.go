@@ -1,23 +1,23 @@
 package spotifydl
 
 import (
+	"context"
 	"fmt"
+	"github.com/zmb3/spotify/v2"
 	"log"
 	"os"
 	"strings"
-
-	"github.com/zmb3/spotify"
 )
 
 // DownloadPlaylist Start initializes complete program
-func DownloadPlaylist(pid string) {
+func DownloadPlaylist(ctx context.Context, pid string) {
 	user := InitAuth()
 	cli := UserData{
 		UserClient: user,
 	}
 	playlistID := spotify.ID(pid)
 
-	trackListJSON, err := cli.UserClient.GetPlaylistTracks(playlistID)
+	trackListJSON, err := cli.UserClient.GetPlaylistTracks(ctx, playlistID)
 	if err != nil {
 		fmt.Println("Playlist not found!")
 		os.Exit(1)
@@ -27,7 +27,7 @@ func DownloadPlaylist(pid string) {
 	}
 
 	for page := 0; ; page++ {
-		err := cli.UserClient.NextPage(trackListJSON)
+		err := cli.UserClient.NextPage(ctx, trackListJSON)
 		if err == spotify.ErrNoMorePages {
 			break
 		}
@@ -44,13 +44,13 @@ func DownloadPlaylist(pid string) {
 }
 
 // DownloadAlbum Download album according to
-func DownloadAlbum(aid string) {
+func DownloadAlbum(ctx context.Context, aid string) {
 	user := InitAuth()
 	cli := UserData{
 		UserClient: user,
 	}
 	albumID := spotify.ID(aid)
-	album, err := user.GetAlbum(albumID)
+	album, err := user.GetAlbum(ctx, albumID)
 	if err != nil {
 		fmt.Println("Album not found!")
 		os.Exit(1)
@@ -65,13 +65,13 @@ func DownloadAlbum(aid string) {
 }
 
 // DownloadSong will download a song with its identifier
-func DownloadSong(sid string) {
+func DownloadSong(ctx context.Context, sid string) {
 	user := InitAuth()
 	cli := UserData{
 		UserClient: user,
 	}
 	songID := spotify.ID(sid)
-	song, err := user.GetTrack(songID)
+	song, err := user.GetTrack(ctx, songID)
 	if err != nil {
 		fmt.Println("Song not found!")
 		os.Exit(1)

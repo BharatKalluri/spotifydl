@@ -2,20 +2,19 @@ package utils
 
 import (
 	"fmt"
+	"github.com/bogem/id3v2"
+	"github.com/zmb3/spotify/v2"
 	"log"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/bogem/id3v2"
-	"github.com/zmb3/spotify"
 )
 
 // TagFileWithSpotifyMetadata takes in a filename as a string and spotify metadata and uses it to tag the music
 func TagFileWithSpotifyMetadata(fileName string, trackData spotify.FullTrack) {
 
 	albumTag := trackData.Album.Name
-	trackArtist := []string{}
+	var trackArtist []string
 	for _, Artist := range trackData.Album.Artists {
 		trackArtist = append(trackArtist, Artist.Name)
 	}
@@ -28,7 +27,12 @@ func TagFileWithSpotifyMetadata(fileName string, trackData spotify.FullTrack) {
 	if err != nil {
 		panic(err)
 	}
-	defer mp3File.Close()
+	defer func(mp3File *id3v2.Tag) {
+		err := mp3File.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(mp3File)
 
 	mp3File.SetTitle(trackData.Name)
 	mp3File.SetArtist(artistTag)

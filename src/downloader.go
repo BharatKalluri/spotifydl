@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/zmb3/spotify"
+	"github.com/zmb3/spotify/v2"
 
 	"github.com/BharatKalluri/spotifydl/src/utils"
 )
